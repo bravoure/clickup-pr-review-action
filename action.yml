@@ -1,0 +1,20 @@
+name: 'ClickUp PR Review Action'
+description: 'Updates ClickUp tasks with tags and comments when PRs are reviewed'
+author: 'Bravoure'
+
+inputs:
+  github-token:
+    description: 'GitHub token for API access'
+    required: true
+    default: ${{ github.token }}
+  clickup-api-key:
+    description: 'ClickUp API Key'
+    required: true
+
+runs:
+  using: 'node16'
+  main: 'index.js'
+
+branding:
+  icon: 'check-circle'
+  color: 'green' 
