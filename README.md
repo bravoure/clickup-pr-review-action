@@ -1,22 +1,22 @@
 # ClickUp PR Review Action
 
-Deze GitHub Action voegt automatisch tags toe aan ClickUp taken en plaatst opmerkingen met review-informatie wanneer een gerelateerde Pull Request wordt goedgekeurd of wanneer er wijzigingen worden gevraagd op GitHub.
+This GitHub Action automatically adds tags to ClickUp tasks and posts comments with review information when a related Pull Request is approved or when changes are requested on GitHub.
 
-## Hoe het werkt
+## How it works
 
-1. Wanneer een Pull Request wordt goedgekeurd of wijzigingen worden gevraagd op GitHub, wordt deze action uitgevoerd.
-2. De action extraheert ClickUp taak-ID's uit:
-   - De branch naam
-   - De PR titel
-   - Alle commit berichten in de PR
-3. Voor elke gevonden taak:
-   - Voor goedkeuringen: Voegt een "Pull request approved" tag toe via de ClickUp API
-   - Voor gevraagde wijzigingen: Voegt een "Changes requested on pull request" tag toe via de ClickUp API
-   - Plaatst een opmerking met de naam van de reviewer, een link naar de PR, en voor gevraagde wijzigingen worden ook de review opmerkingen toegevoegd
+1. When a Pull Request is approved or changes are requested on GitHub, this action is triggered.
+2. The action extracts ClickUp task IDs from:
+   - The branch name
+   - The PR title
+   - All commit messages in the PR
+3. For each found task:
+   - For approvals: Adds a "Pull request approved" tag via the ClickUp API
+   - For requested changes: Adds a "Changes requested on pull request" tag via the ClickUp API
+   - Posts a comment with the reviewer's name, a link to the PR, and for requested changes, the review comments are also added
 
-## Gebruik
+## Usage
 
-Voeg de volgende workflow toe aan je repository in `.github/workflows/clickup-pr-review.yml`:
+Add the following workflow to your repository in `.github/workflows/clickup-pr-review.yml`:
 
 ```yaml
 name: ClickUp PR Review Integration
@@ -35,26 +35,26 @@ jobs:
           clickup-api-key: ${{ secrets.CLICKUP_API_KEY }}
 ```
 
-## Vereisten
+## Requirements
 
-1. **ClickUp API Key**: Je moet je ClickUp API key toevoegen als een GitHub repository secret met de naam `CLICKUP_API_KEY`.
+1. **ClickUp API Key**: You need to add your ClickUp API key as a GitHub repository secret named `CLICKUP_API_KEY`.
 
-   Om deze secret aan te maken:
-   - Ga naar je GitHub repository
-   - Navigeer naar Settings > Secrets and variables > Actions
-   - Klik op "New repository secret"
-   - Naam: `CLICKUP_API_KEY`
-   - Waarde: Je ClickUp API key
+   To create this secret:
+   - Go to your GitHub repository
+   - Navigate to Settings > Secrets and variables > Actions
+   - Click "New repository secret"
+   - Name: `CLICKUP_API_KEY`
+   - Value: Your ClickUp API key
 
-2. **ClickUp Tags**: Zorg ervoor dat de volgende tags bestaan in je ClickUp workspace:
-   - `Pull request approved` - Voor goedgekeurde PR's
-   - `Changes requested on pull request` - Voor PR's waar wijzigingen zijn gevraagd
+2. **ClickUp Tags**: Make sure the following tags exist in your ClickUp workspace:
+   - `Pull request approved` - For approved PRs
+   - `Changes requested on pull request` - For PRs where changes are requested
 
-## Taak-ID formaat
+## Task ID Format
 
-De action zoekt naar ClickUp taak-ID's in de volgende formaten:
-- `CU-abc123` of `cu-abc123` (hoofdletterongevoelig)
-- `CU_abc123` of `cu_abc123` (hoofdletterongevoelig)
+The action looks for ClickUp task IDs in the following formats:
+- `CU-abc123` or `cu-abc123` (case insensitive)
+- `CU_abc123` or `cu_abc123` (case insensitive)
 - `#abc123`
 
-Zorg ervoor dat je branch namen, PR titels of commit berichten het taak-ID in een van deze formaten bevatten. 
+Make sure your branch names, PR titles, or commit messages contain the task ID in one of these formats. 
