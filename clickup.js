@@ -27,9 +27,51 @@ function extractClickUpTaskIds(text) {
   return taskIds;
 }
 
+// Function to remove a tag from a ClickUp task
+async function removeTagFromTask(taskId, tagName, apiKey) {
+  try {
+    const response = await axios.delete(
+      `https://api.clickup.com/api/v2/task/${taskId}/tag/${tagName}`,
+      {
+        headers: {
+          'Authorization': apiKey,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+    
+    core.info(`Successfully removed "${tagName}" tag from ClickUp task ${taskId}.`);
+    return true;
+  } catch (error) {
+    if (error.response && error.response.status === 404) {
+      // Tag doesn't exist, which is fine
+      return true;
+    }
+    core.error(`Error removing tag from task ${taskId}:`);
+    if (error.response) {
+      core.error(`Status: ${error.response.status}`);
+      core.error(`Response: ${JSON.stringify(error.response.data)}`);
+    } else {
+      core.error(error.message);
+    }
+    return false;
+  }
+}
+
 // Function to add a tag to a ClickUp task
 async function addTagToTask(taskId, tagName, apiKey) {
   try {
+    // First remove any existing review tags
+    const reviewTags = [
+      'Pull request approved',
+      'Changes requested on pull request'
+    ];
+    
+    for (const existingTag of reviewTags) {
+      await removeTagFromTask(taskId, existingTag, apiKey);
+    }
+    
+    // Then add the new tag
     const response = await axios.post(
       `https://api.clickup.com/api/v2/task/${taskId}/tag/${tagName}`,
       {},
