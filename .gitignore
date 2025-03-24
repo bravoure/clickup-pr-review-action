@@ -36,9 +36,6 @@ coverage
 # nyc test coverage
 .nyc_output
 
-# Compiled binary addons
-dist/
-
 # IDE files
 .idea/
 .vscode/
